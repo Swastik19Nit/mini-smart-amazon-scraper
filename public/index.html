@@ -6,36 +6,97 @@
   <title>Amazon Product Scraper</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <style>
+    body {
+      background-color: #0a0a0f;
+      color: #e5e7eb;
+    }
+    
     .loader {
-      border-top-color: #3498db;
+      border-top-color: #3b82f6;
       animation: spinner 1.5s linear infinite;
     }
+    
     @keyframes spinner {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
     .image-gallery img {
       max-height: 100px;
       object-fit: contain;
+      border: 1px solid #374151;
+      padding: 4px;
+      border-radius: 4px;
+      background-color: #1f2937;
+      transition: all 0.2s;
+    }
+    
+    .image-gallery img:hover {
+      border-color: #3b82f6;
+      transform: scale(1.05);
+    }
+    
+    .card {
+      background-color: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    }
+    
+    input, button {
+      transition: all 0.2s;
+    }
+    
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
+    
+    button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
+    
+    .star-rating {
+      color: #f59e0b;
+    }
+    
+    .special-offer {
+      background-color: rgba(146, 64, 14, 0.2);
+      border: 1px solid rgba(180, 83, 9, 0.3);
+    }
+    
+    .ai-summary {
+      background-color: rgba(30, 58, 138, 0.2);
+      border: 1px solid rgba(30, 64, 175, 0.3);
+    }
+    
+    .discount-badge {
+      background-color: rgba(153, 27, 27, 0.3);
+      color: #fca5a5;
+    }
+    
+    .image-container {
+      background-color: #1f2937;
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body>
   <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold text-center mb-8">Amazon Product Scraper</h1>
+    <h1 class="text-3xl font-bold text-center mb-8 text-white">Amazon Product Scraper</h1>
     
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <div class="card p-6 mb-8">
       <form id="scrape-form" class="flex flex-col md:flex-row gap-4">
         <input 
           type="url" 
           id="product-url" 
           placeholder="Enter Amazon product URL" 
-          class="flex-grow px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="flex-grow px-4 py-2 border rounded bg-gray-800 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
           required
         >
         <button 
           type="submit" 
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded"
         >
           Scrape Product
         </button>
@@ -43,36 +104,36 @@
     </div>
 
     <div id="loading" class="hidden flex justify-center my-8">
-      <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+      <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-700 h-12 w-12"></div>
     </div>
 
-    <div id="error" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded">
+    <div id="error" class="hidden bg-red-900 bg-opacity-50 border-l-4 border-red-500 text-red-200 p-4 mb-8 rounded">
       <p id="error-message"></p>
     </div>
 
     <div id="results" class="hidden">
       <!-- Product Header -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div class="card p-6 mb-6">
         <div class="flex flex-col md:flex-row gap-6">
           <div class="md:w-1/3">
-            <div id="main-image" class="bg-gray-100 rounded-lg p-4 flex items-center justify-center h-64">
-              <img src="" alt="Product" class="max-h-full object-contain">
+            <div id="main-image" class="image-container rounded-lg p-4 flex items-center justify-center h-64">
+              <img src="/placeholder.svg" alt="Product" class="max-h-full object-contain">
             </div>
             <div id="image-gallery" class="image-gallery flex overflow-x-auto gap-2 mt-4 p-2"></div>
           </div>
           <div class="md:w-2/3">
-            <h2 id="product-name" class="text-2xl font-bold mb-2"></h2>
+            <h2 id="product-name" class="text-2xl font-bold mb-2 text-white"></h2>
             <div class="flex items-center mb-4">
-              <span id="rating" class="text-yellow-500 font-bold mr-2"></span>
-              <span id="num-ratings" class="text-gray-600"></span>
+              <span id="rating" class="star-rating font-bold mr-2"></span>
+              <span id="num-ratings" class="text-gray-400"></span>
             </div>
             <div class="flex items-center mb-4">
-              <span id="price" class="text-2xl font-bold text-green-600 mr-4"></span>
-              <span id="discount" class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm"></span>
+              <span id="price" class="text-2xl font-bold text-green-400 mr-4"></span>
+              <span id="discount" class="discount-badge px-2 py-1 rounded text-sm"></span>
             </div>
-            <div id="bank-offers" class="mb-4 p-4 bg-yellow-50 rounded-lg text-sm"></div>
-            <div id="ai-summary" class="mb-4 p-4 bg-blue-50 rounded-lg">
-              <h3 class="font-bold text-blue-800 mb-2">AI Review Summary</h3>
+            <div id="bank-offers" class="mb-4 p-4 special-offer rounded-lg text-sm"></div>
+            <div id="ai-summary" class="mb-4 p-4 ai-summary rounded-lg">
+              <h3 class="font-bold text-blue-400 mb-2">AI Review Summary</h3>
               <p id="ai-summary-text"></p>
             </div>
           </div>
@@ -81,25 +142,25 @@
 
       <!-- Product Details -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-bold mb-4">About This Item</h3>
-          <div id="about-item" class="text-gray-700"></div>
+        <div class="card p-6">
+          <h3 class="text-xl font-bold mb-4 text-white">About This Item</h3>
+          <div id="about-item" class="text-gray-300"></div>
         </div>
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-bold mb-4">Product Information</h3>
-          <div id="product-info" class="text-gray-700"></div>
+        <div class="card p-6">
+          <h3 class="text-xl font-bold mb-4 text-white">Product Information</h3>
+          <div id="product-info" class="text-gray-300"></div>
         </div>
       </div>
 
       <!-- Manufacturer Images -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h3 class="text-xl font-bold mb-4">Manufacturer Images</h3>
+      <div class="card p-6 mb-6">
+        <h3 class="text-xl font-bold mb-4 text-white">Manufacturer Images</h3>
         <div id="manufacturer-images" class="flex flex-wrap gap-4"></div>
       </div>
 
       <!-- Customer Reviews -->
-      <div class="bg-white rounded-lg shadow-md p-6">
-        <h3 class="text-xl font-bold mb-4">Customer Reviews</h3>
+      <div class="card p-6">
+        <h3 class="text-xl font-bold mb-4 text-white">Customer Reviews</h3>
         <div id="customer-reviews"></div>
       </div>
     </div>
@@ -145,7 +206,7 @@
       function displayResults(data) {
         // Product name and basics
         document.getElementById('product-name').textContent = data.productName;
-        document.getElementById('rating').textContent = data.rating;
+        document.getElementById('rating').textContent = data.rating + ' ★';
         document.getElementById('num-ratings').textContent = data.numRatings;
         document.getElementById('price').textContent = data.sellingPrice;
         document.getElementById('discount').textContent = data.totalDiscount || 'No discount';
@@ -153,9 +214,9 @@
         // Bank offers
         const bankOffersEl = document.getElementById('bank-offers');
         if (data.bankOffers && data.bankOffers !== 'N/A') {
-          bankOffersEl.innerHTML = `<strong>Special Offers:</strong> ${data.bankOffers}`;
+          bankOffersEl.innerHTML = `<strong class="text-yellow-400">Special Offers:</strong> ${data.bankOffers}`;
         } else {
-          bankOffersEl.innerHTML = '<em>No special offers available</em>';
+          bankOffersEl.innerHTML = '<em class="text-gray-400">No special offers available</em>';
         }
         
         // AI Summary
@@ -178,7 +239,7 @@
             const img = document.createElement('img');
             img.src = imgSrc;
             img.alt = 'Product image';
-            img.className = 'cursor-pointer border hover:border-blue-500';
+            img.className = 'cursor-pointer hover:border-blue-500';
             img.onclick = () => { mainImageEl.src = imgSrc; };
             imageGalleryEl.appendChild(img);
           });
@@ -196,11 +257,11 @@
             const img = document.createElement('img');
             img.src = imgSrc;
             img.alt = 'Manufacturer image';
-            img.className = 'max-h-40 object-contain';
+            img.className = 'max-h-40 object-contain border border-gray-700 rounded p-2 bg-gray-800';
             manufacturerImagesEl.appendChild(img);
           });
         } else {
-          manufacturerImagesEl.innerHTML = '<p class="text-gray-500">No manufacturer images available</p>';
+          manufacturerImagesEl.innerHTML = '<p class="text-gray-400">No manufacturer images available</p>';
         }
         
         // Customer reviews
@@ -210,17 +271,17 @@
         if (data.customerReviews && data.customerReviews.length > 0) {
           data.customerReviews.forEach(review => {
             const reviewEl = document.createElement('div');
-            reviewEl.className = 'mb-4 pb-4 border-b border-gray-200';
+            reviewEl.className = 'mb-4 pb-4 border-b border-gray-700';
             reviewEl.innerHTML = `<p>${review}</p>`;
             reviewsEl.appendChild(reviewEl);
           });
         } else {
-          reviewsEl.innerHTML = '<p class="text-gray-500">No customer reviews available</p>';
+          reviewsEl.innerHTML = '<p class="text-gray-400">No customer reviews available</p>';
         }
       }
 
       function formatTextWithBullets(text) {
-        if (!text || text === 'N/A') return '<p class="text-gray-500">Information not available</p>';
+        if (!text || text === 'N/A') return '<p class="text-gray-400">Information not available</p>';
         
         // Check if the text already contains bullets or special formatting
         if (text.includes('•') || text.includes('\n')) {
